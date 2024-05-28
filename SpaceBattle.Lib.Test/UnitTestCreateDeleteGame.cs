@@ -12,7 +12,7 @@ public class CreateDeleteGameTest
     };
     public CreateDeleteGameTest()
     {
-        new Hwdtech.Ioc.InitScopeBasedIoCImplementationCommand();
+        new Hwdtech.Ioc.InitScopeBasedIoCImplementationCommand().Execute();
         var scope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"));
         IoC.Resolve<ICommand>("Scopes.Current.Set", scope).Execute();
 
