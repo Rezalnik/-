@@ -5,6 +5,7 @@ using Hwdtech;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.IO;
 
 public class Test_MessageProcessorCommand
 {   
@@ -66,5 +67,30 @@ public class Test_MessageProcessorCommand
         Assert.Equal(1, startMoveSent);
         Assert.Equal(1, commandsWereSent);
         Assert.Equal(1, objectWasGet);
+    }
+    [Fact]
+    public void Test_CreateNotInterpretationCommand()
+    {
+        var mockMessage = new Mock<IMessage>();
+        var mockUObject = new Mock<IUObject>();
+        var mockCommand = new Mock<ICommand>();
+        var mockSender = new Mock<ISender>();
+
+        var gameId = "123";
+        var gameItemId = "o123";
+        var properties = new Dictionary<string, object> { { "InititalVelocity", 2 }, { "InititialHP", 50 } };
+        var type = "WasdMove";
+
+        mockMessage.SetupGet(m => m.gameId).Returns(gameId);
+        mockMessage.SetupGet(m => m.gameItemId).Returns(gameItemId);
+        mockMessage.SetupGet(m => m.properties).Returns(properties);
+        mockMessage.SetupGet(m => m.type).Returns(type);
+
+        var interpretationCommand = new InterpretationCommand(mockMessage.Object);
+        try {
+            interpretationCommand.Execute();
+        } catch(Exception) {}
+
+        Assert.Equal(0, commandsWereSent);
     }
 }
